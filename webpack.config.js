@@ -23,8 +23,9 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js']
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: '.'
   },
+  devtool: "source-map",
   module: {
     rules: [{
       test: /\.ts?$/,

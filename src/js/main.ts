@@ -1,23 +1,22 @@
 declare var require: any;
 require('../css/main.css');
 import me from './me';
-import PlayerEntity from './entities/player';
 import PlayScreen from './screens/play';
 import TitleScreen from './screens/title';
+import resources from './resources';
 
 
 class Bootstrap {
 
     constructor() {
         // Initialize the video.
-        if (!me.video.init(640, 480, { wrapper : "screen", scale : "flex-width", renderer: me.video.CANVAS })) {
+        if (!me.video.init(640, 480, { wrapper : "screen", scale: "auto", scaleMethod : "flex-width" })) {
             alert("Your browser does not support HTML5 canvas.");
             return;
         }
 
         // add "#debug" to the URL to enable the debug Panel
         if (document.location.hash === "#debug") {
-            console.log("show debug");
             window.addEventListener('load', () => {
                 me.plugin.register.defer(this, me.debug.Panel, "debug", me.input.KEY.V);
             });
@@ -30,7 +29,7 @@ class Bootstrap {
         me.loader.onload = this.loaded.bind(this);
 
         // Load the resources.
-        me.loader.preload({});
+        me.loader.preload(resources);
 
         // Initialize melonJS and display a loading screen.
         me.state.change(me.state.LOADING);
@@ -39,9 +38,6 @@ class Bootstrap {
     loaded() {
         me.state.set(me.state.MENU, new TitleScreen());
         me.state.set(me.state.PLAY, new PlayScreen());
-
-        // add our player entity in the entity pool
-        me.pool.register("mainPlayer", PlayerEntity);
 
         // Start the game.
         me.state.change(me.state.PLAY);
